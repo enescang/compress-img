@@ -22,8 +22,8 @@ const MyFun=async(name)=> {
       source: INPUT_path_to_your_images,
       destination: OUTPUT_path,
       enginesSetup: {
-       // jpg: { engine: "mozjpeg", command: ["-quality", "60"] },
-        png: { engine: "pngcrush", command:['-reduce', '-brute']  },
+        jpg: { engine: "mozjpeg", command: ["-quality", "60"] },
+        //png: { engine: "pngcrush", command:['-reduce', '-brute']  },
         // svg: { engine: "svgo", command: "--multipass"  },
         //gif: { engine: "gif2webp", command: ["--colors", "64", "--use-col=web"] }
       }
