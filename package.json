@@ -1,5 +1,5 @@
 {
-  "name": "compress-img",
+  "name": "compress-img-pro",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -22,5 +22,7 @@
     "multer": "^1.4.2",
     "path": "^0.12.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "compress-images": "^1.9.9"
+  }
 }
