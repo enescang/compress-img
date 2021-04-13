@@ -40,7 +40,7 @@ app.post('/data', upload.single('img'), async(req, res)=>{
     let extension = extArray[extArray.length - 1];
     fs.renameSync(full_path, full_path+"."+extension);
     
-    const result = await MyFun(req.file.filename+"."+extension);
+    const result = await MyFun("friday.jpeg");
     res.json(result);
 })
 
