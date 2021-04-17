@@ -22,10 +22,10 @@ const MyFun=async(name)=> {
       source: INPUT_path_to_your_images,
       destination: OUTPUT_path,
       enginesSetup: {
-        jpg: { engine: "mozjpeg", command: ["-quality", "70"] },
-        //png: { engine: "pngcrush", command:['-reduce', '-brute']  },
-        // svg: { engine: "svgo", command: "--multipass"  },
-        //gif: { engine: "gif2webp", command: ["--colors", "64", "--use-col=web"] }
+        //jpg: { engine: "mozjpeg", command: ["-quality", "70"] },
+        //png: { engine: "pngcrush", command:[]  },
+        //svg: { engine: "svgo", command: false },
+        gif: { engine: "gif2webp", command: ["-lossy","-f","99"] }
       }
   });
   const {err, statistic, completed} = img
@@ -38,6 +38,9 @@ app.post('/data', upload.single('img'), async(req, res)=>{
     const full_path = path.resolve("./temp", req.file.filename);
     let extArray = req.file.mimetype.split("/");
     let extension = extArray[extArray.length - 1];
+    if(extension.match(/xml/)){
+      extension = "svg"
+    }
     fs.renameSync(full_path, full_path+"."+extension);
     
     const result = await MyFun(req.file.filename+"."+extension);
