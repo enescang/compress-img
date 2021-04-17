@@ -22,7 +22,7 @@ const MyFun=async(name)=> {
       source: INPUT_path_to_your_images,
       destination: OUTPUT_path,
       enginesSetup: {
-        jpg: { engine: "mozjpeg", command: ["-quality", "60"] },
+        jpg: { engine: "guetzli", command: ["--quality", "99"] },
         //png: { engine: "pngcrush", command:['-reduce', '-brute']  },
         // svg: { engine: "svgo", command: "--multipass"  },
         //gif: { engine: "gif2webp", command: ["--colors", "64", "--use-col=web"] }
@@ -40,7 +40,7 @@ app.post('/data', upload.single('img'), async(req, res)=>{
     let extension = extArray[extArray.length - 1];
     fs.renameSync(full_path, full_path+"."+extension);
     
-    const result = await MyFun("friday.jpeg");
+    const result = await MyFun(req.file.filename+"."+extension);
     res.json(result);
 })
 
