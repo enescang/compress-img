@@ -22,7 +22,7 @@ const MyFun=async(name)=> {
       source: INPUT_path_to_your_images,
       destination: OUTPUT_path,
       enginesSetup: {
-        jpg: { engine: "guetzli", command: ["--quality", "99"] },
+        jpg: { engine: "mozjpeg", command: ["-quality", "70"] },
         //png: { engine: "pngcrush", command:['-reduce', '-brute']  },
         // svg: { engine: "svgo", command: "--multipass"  },
         //gif: { engine: "gif2webp", command: ["--colors", "64", "--use-col=web"] }
