@@ -24,8 +24,8 @@ const MyFun=async(name)=> {
       enginesSetup: {
         //jpg: { engine: "mozjpeg", command: ["-quality", "70"] },
         //png: { engine: "pngcrush", command:[]  },
-        //svg: { engine: "svgo", command: false },
-        gif: { engine: "gif2webp", command: [] }
+        svg: { engine: "svgo", command: false },
+        //gif: { engine: "gif2webp", command: [] }
       }
   });
   const {err, statistic, completed} = img
