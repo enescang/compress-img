@@ -22,7 +22,11 @@ SVG:
 
 
 GIF:
-**png2webp**
+**gif2webp**
 * -lossy (tek başına kullanılır)
 * -q 0-100
 * -f 0-100 -lossy ile kullanılır
+(centos'da çalışmadı tekrar test edilecek)
+
+**gifsicle**
+* --scale 0-1 (boyutlandırma)
