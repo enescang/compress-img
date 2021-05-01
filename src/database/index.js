@@ -14,4 +14,4 @@ const DB = (databaseName) => {
     return mongoose.connection;
 };
 
-export default DB;
+module.exports = DB;

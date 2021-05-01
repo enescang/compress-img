@@ -1,9 +1,16 @@
-import express from 'express';
-import DB from './src/database';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import cors from 'cors';
+// import express from 'express';
+// import DB from './src/database';
+// import multer from 'multer';
+// import path from 'path';
+// import fs from 'fs';
+// import cors from 'cors';
+
+const express = require('express');
+const DB = require('./src/database');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const cors = require('cors');
 
 const app = express();
 
