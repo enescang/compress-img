@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose =require('mongoose');
 
 const connectMongodb = (databaseName) => {
     mongoose.connect(process.env.MONGO_DB + databaseName, {
