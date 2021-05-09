@@ -71,7 +71,7 @@ app.post('/gif', upload.single('img'), async (req, res) => {
     let extArray = req.file.mimetype.split("/");
     let extension = extArray[extArray.length - 1];
     if (extension.toString() !== 'gif') {
-      return res.send(401).send({ error: 'IMAGE_NOT_GIF' });
+      return res.status(401).send({ error: 'IMAGE_NOT_GIF' });
     }
 
     //Rename image
@@ -93,8 +93,34 @@ app.post('/gif', upload.single('img'), async (req, res) => {
   } catch (e) {
     res.send(e.message)
   }
+});
 
-})
+app.post('/svg', upload.single('img'), async (req, res) => {
+  console.log("GIF_REQUEST COMING", req.body);
+  try {
+    if (!req.file)
+      return res.status(401).send({error:'Dosya Seçilmedi'});
+    const full_path = path.resolve("./temp", req.file.filename);
+    let extArray = req.file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+
+    if (!extension.match(/xml/)) {
+      return res.status(401).send({ error: 'IMAGE_NOT_SVG' });
+    }
+
+    extension = "svg";
+    //Rename image
+    fs.renameSync(full_path, full_path+"."+extension);
+
+    const SVG_ENGINE = { svg: { engine: 'svgo', command: [] } };
+    const options = { fileName: req.file.filename + "." + extension, engineSetup: SVG_ENGINE };
+
+    const result = await MyFun(options);
+     res.json(result);
+  } catch (e) {
+    res.send(e.message)
+  }
+});
 
 const db = DB(process.env.DB_NAME);
 db.on('error', (error) => console.log(error));
