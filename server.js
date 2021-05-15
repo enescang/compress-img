@@ -19,6 +19,11 @@ const upload = multer({ dest: 'temp/' })
 const { compress } = require("compress-images/promise");
 const { PORT } = process.env;
 
+
+
+app.use('/build',express.static(path.join(__dirname, 'build')));
+app.use('/temp',express.static(path.join(__dirname, 'temp')));
+
 app.listen(PORT, () => {
   console.log('server')
 });
@@ -104,9 +109,9 @@ app.post('/svg', upload.single('img'), async (req, res) => {
     let extArray = req.file.mimetype.split("/");
     let extension = extArray[extArray.length - 1];
 
-    if (!extension.match(/xml/)) {
-      return res.status(401).send({ error: 'IMAGE_NOT_SVG' });
-    }
+    // if (!extension.match(/xml/)) {
+    //   return res.status(401).send({ error: 'IMAGE_NOT_SVG' });
+    // }
 
     extension = "svg";
     //Rename image
