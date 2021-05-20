@@ -46,6 +46,7 @@ const MyFun = async ({ fileName = null, engineSetup = {} }) => {
   
     });
     const { err, statistic, completed } = img
+    console.log("COMPRESSION FINISHED")
     return img;
   } catch(e){
     throw new Error(e)
@@ -121,6 +122,58 @@ app.post('/svg', upload.single('img'), async (req, res) => {
     const options = { fileName: req.file.filename + "." + extension, engineSetup: SVG_ENGINE };
 
     const result = await MyFun(options);
+     res.json(result);
+  } catch (e) {
+    res.send(e.message)
+  }
+});
+
+app.post('/png', upload.single('img'), async (req, res) => {
+  console.log("PNG_REQUEST COMING", req.body);
+  try {
+    if (!req.file)
+      return res.status(401).send({error:'Dosya Seçilmedi'});
+    const full_path = path.resolve("./temp", req.file.filename);
+    let extArray = req.file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+
+    if (extension.toString() !== 'png') {
+      return res.status(401).send({ error: 'IMAGE_NOT_PNG' });
+    }
+
+    extension = "png";
+    let defaultEngine = 'pngout';
+    let isWebp = false;
+
+    const PNG_ENGINE = { png: { engine: defaultEngine, command: [] } };
+
+    //check the engine is written
+    if(req.body.engine == 'pngcrush') {
+      PNG_ENGINE.png.engine = 'pngcrush';
+      PNG_ENGINE.png.command.push('-reduce');
+      PNG_ENGINE.png.command.push('-brute');
+    }
+
+    if(req.body.engine == 'webp') {
+      PNG_ENGINE.png.engine = 'webp';
+      PNG_ENGINE.png.command.push('-q');
+      PNG_ENGINE.png.command.push('70');
+
+      if(req.body.quality >0 && req.body.quality <= 100) {
+        PNG_ENGINE.png.command[1] = req.body.quality;
+      }
+      isWebp = true;
+    }
+
+    //Rename image
+    fs.renameSync(full_path, full_path+"."+extension);
+    const options = { fileName: req.file.filename + "." + extension, engineSetup: PNG_ENGINE };
+
+    let result = await MyFun(options);
+    if(isWebp && result.errors.length < 1) {
+      fs.renameSync("./build/"+req.file.filename+"."+extension, "./build/"+req.file.filename+"."+"webp");
+      result.statistics[0].path_out_new = 'build/'+req.file.filename+"."+"webp"
+    }
      res.json(result);
   } catch (e) {
     res.send(e.message)
