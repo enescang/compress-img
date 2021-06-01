@@ -180,6 +180,41 @@ app.post('/png', upload.single('img'), async (req, res) => {
   }
 });
 
+app.post('/jpg', upload.single('img'), async (req, res) => {
+  console.log("JPG_REQUEST COMING", req.body);
+  try {
+    if (!req.file)
+      return res.status(401).send({error:'Dosya Seçilmedi'});
+    const full_path = path.resolve("./temp", req.file.filename);
+    let extArray = req.file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+
+    const isJpeg = extension.toString().toLowerCase() == "jpeg" || extension.toString().toLowerCase() == "jpg";
+    if (isJpeg == false) {
+      console.log(extension, extension == "jpeg")
+      return res.status(401).send({ error: 'IMAGE_NOT_JPG' });
+    }
+
+    //Rename image
+    fs.renameSync(full_path, full_path+"."+extension);
+
+    const JPG_ENGINE = { jpg: { engine: 'mozjpeg', command: ["-quality", "60"]  } };
+    const options = { fileName: req.file.filename + "." + extension, engineSetup: JPG_ENGINE };
+
+    if(req.body.quality) {
+      if(Number(req.body.quality) > 1 && Number(req.body.quality) < 100) {
+        console.log("QUALITY")
+        JPG_ENGINE.jpg.command[1] = req.body.quality;
+      }
+    }
+
+    const result = await MyFun(options);
+     res.json(result);
+  } catch (e) {
+    res.send(e.message)
+  }
+});
+
 const db = DB(process.env.DB_NAME);
 db.on('error', (error) => console.log(error));
 db.once('open', () => console.log('Mongodb connected'));
